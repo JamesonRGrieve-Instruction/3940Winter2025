@@ -3,9 +3,9 @@
 import Link from "next/link"; // Server-Side
 import { useRouter } from "next/navigation"; // Client-Side
 import React from "react";
-export default function ExamplePage({ searchParams }) {
+export default function ExamplePage({ searchParams }: { searchParams: any }) {
   const router = useRouter();
-  const { name } = React.use(searchParams);
+  const { name }: { name: any } = React.use(searchParams);
   return (
     <>
       <h1>Hello, Again, World!</h1>

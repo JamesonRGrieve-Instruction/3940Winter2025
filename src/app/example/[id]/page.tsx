@@ -1,26 +1,33 @@
-"use client";
-
 import Link from "next/link"; // Server-Side
-import { useRouter } from "next/navigation"; // Client-Side
 import React from "react";
-export default function ExamplePage({ params, searchParams }) {
-  const router = useRouter();
-  const { name } = React.use(searchParams);
-  const { id } = React.use(params);
+const posts = [
+  {
+    id: 1,
+    content: "Hello, world!",
+  },
+  {
+    id: 2,
+    content: "Hello, again, world!",
+  },
+  {
+    id: 3,
+    content: "Hello, yet again, world!",
+  },
+];
+export default function ExamplePage({ params }: { params: any }) {
+  const { id }: { id: any } = React.use(params);
   return (
     <>
-      <h1>Hello, Again, World!</h1>
       <Link href="/">Go Home!</Link>
       <br />
-      <button
-        onClick={() => {
-          router.push("/");
-        }}
-      >
-        Go Home Client
-      </button>
-      <p>ID Slug: {id}</p>
-      <p>Name Search Param: {name}</p>
+      <h1>Post Number #{id}</h1>
+      <p>{posts.find((post) => post.id == id)?.content}</p>
     </>
   );
 }
+export function generateStaticParams() {
+  return posts.map((post) => ({
+    id: post.id.toString(),
+  }));
+}
+export const dynamicParams = false;
