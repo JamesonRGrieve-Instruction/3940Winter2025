@@ -30,8 +30,8 @@ export default function RootLayout({
         <p className={`${geistSans.className} antialiased`}>Test Paragraph</p>
         <nav className="flex justify-center align-middle">
           <ul className="flex justify-center align-middle gap-4 ">
-            <Link href="/counter">Counter Page</Link>
-            <Link href="/colour">Colour Page</Link>
+            <Link href="/">Home</Link>
+            <Link href="/images">Gallery</Link>
           </ul>
         </nav>
         <main className="max-w-[960px] mx-auto">{children}</main>
