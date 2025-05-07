@@ -7,7 +7,10 @@ export default function Home() {
   const {data, isLoading, error} = useSWR("randomUser", async () => {
       await new Promise(r => setTimeout(r, 2000));
       return (await axios.get("https://randomuser.me/api/")).data.results[0]
-  })
+  }, {
+    revalidateOnFocus: false,
+    refreshInterval: 5
+  });
 
   if (isLoading) {
     return <p>Loading...</p>
