@@ -9,11 +9,16 @@ export default function Home() {
       return (await axios.get("https://randomuser.me/api/")).data.results[0]
   }, {
     revalidateOnFocus: false,
+    fallbackData: {
+      name: {
+        first: "Loading, please wait..."
+      }
+    }
   });
 
-  if (isLoading) {
-    return <p>Loading...</p>
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>
+  // }
   if (error) {
     return <h1>ERROR: {error.message}</h1>
   }
