@@ -1,20 +1,25 @@
+"use client"
+import ShowSWR from "@/components/ShowSWR";
+import axios from "axios";
 import { redirect } from "next/navigation";
+import useSWR from "swr";
 export default function Home() {
-  async function processForm(formData: FormData) {
-    "use server";
-    const postID = formData.get("postID");
-    console.log("POST ID: ", postID);
-    redirect(`/example/${postID}`);
-  }
+  const {data, isLoading, error} = useSWR("randomUser", async () => {
+      await new Promise(r => setTimeout(r, 2000));
+      return (await axios.get("https://randomuser.me/api/")).data.results[0]
+  })
 
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
+  if (error) {
+    return <h1>ERROR: {error.message}</h1>
+  }
   return (
-    <form
-      action={processForm}
-      className="flex flex-col gap-4 w-full align-middle text-center px-24"
-    >
-      <label htmlFor="postID">Post ID</label>
-      <input id="postID" type="text" name="postID" />
-      <button type="submit">Go To Post</button>
-    </form>
+    <>
+      <p>{JSON.stringify(data)}</p>
+      <h2>{data.name.first}</h2>
+      <ShowSWR />
+    </>
   );
 }
