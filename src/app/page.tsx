@@ -2,14 +2,13 @@
 import ShowSWR from "@/components/ShowSWR";
 import axios from "axios";
 import { redirect } from "next/navigation";
-import useSWR from "swr";
+import useSWR, {mutate} from "swr";
 export default function Home() {
-  const {data, isLoading, error} = useSWR("randomUser", async () => {
+  const {data: userData, isLoading, error, mutate: mutateUser} = useSWR("randomUser", async () => {
       await new Promise(r => setTimeout(r, 2000));
       return (await axios.get("https://randomuser.me/api/")).data.results[0]
   }, {
     revalidateOnFocus: false,
-    refreshInterval: 5
   });
 
   if (isLoading) {
@@ -20,9 +19,15 @@ export default function Home() {
   }
   return (
     <>
-      <p>{JSON.stringify(data)}</p>
-      <h2>{data.name.first}</h2>
+      <p>{JSON.stringify(userData)}</p>
+      <h2>{userData.name.first}</h2>
       <ShowSWR />
+      <button onClick={() => {
+        mutateUser()
+      }}>Revalidate User</button>
+      <button onClick={() => {
+        mutate("randomNumber")
+      }}>Revalidate Number</button>
     </>
   );
 }
