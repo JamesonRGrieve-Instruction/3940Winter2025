@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { redirect } from "next/navigation";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,12 +23,47 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  async function processForm(formData: FormData) {
+    "use server";
+    console.log(formData);
+    const value = formData.get("value");
+    console.log(
+      formData.get("go"),
+      formData.get("override"),
+      formData.get("query")
+    );
+    if (formData.get("go") !== null) {
+      redirect(`/render-slug/${value}`);
+    } else if (formData.get("override") !== null) {
+      redirect(`/render-slug/${value}/override`);
+    } else if (formData.get("query") !== null) {
+      redirect(`/render-query?query=${value}`);
+    }
+  }
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-between">
+          <header className="w-full bg-gray-500 text-center flex justify-around">
+            {process.env.NEXT_PUBLIC_APP_NAME}
+            {/* {process.env.NODE_ENV === "development" && " - Dev"} */}
+            <form
+              action={processForm}
+              className="flex justify-around flex-grow"
+            >
+              <input name="value" />
+              <button name="go">Go!</button>
+              <button name="override">Go Override!</button>
+              <button name="query">Go Query!</button>
+            </form>
+          </header>
+          <main className="flex-grow container bg-slate-300 text-black h-96 overflow-auto ">
+            {children}
+          </main>
+          <footer className="w-full bg-gray-500 text-center">Footer</footer>
+        </div>
       </body>
     </html>
   );
