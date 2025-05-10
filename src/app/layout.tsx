@@ -35,7 +35,9 @@ export default function RootLayout({
     if (formData.get("go") !== null) {
       redirect(`/render-slug/${value}`);
     } else if (formData.get("override") !== null) {
-      redirect(`/render-slug/${value}/override`);
+      redirect(
+        `/render-slug/${encodeURIComponent((value ?? "").toString())}/override`
+      );
     } else if (formData.get("query") !== null) {
       redirect(`/render-query?query=${value}`);
     }

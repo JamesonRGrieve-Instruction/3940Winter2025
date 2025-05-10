@@ -7,7 +7,7 @@ export default function ExamplePage({ params }: { params: any }) {
   if (validSlugs.includes(slug)) {
     redirect("..");
   }
-  return <h1>{slug.toUpperCase()}</h1>;
+  return <h1>{decodeURIComponent(slug).toUpperCase()}</h1>;
 }
 
 export async function generateMetadata({ params }: { params: any }) {
